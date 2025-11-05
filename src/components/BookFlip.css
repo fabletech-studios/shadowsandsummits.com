@@ -2,12 +2,20 @@
   position: relative;
   width: 100%;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 2000px;
   background-attachment: fixed;
   background-size: cover;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  touch-action: pan-y pinch-zoom;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
 }
 
 .atmosphere-overlay {
@@ -1510,14 +1518,29 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .book-container {
+    padding: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
   .book {
     width: 90vw;
-    height: 85vh;
-    max-width: 500px;
+    height: auto;
+    max-height: calc(100vh - 140px);
+    max-height: calc(100dvh - 140px);
+    max-width: 420px;
+    aspect-ratio: 3/4;
+  }
+
+  .book:hover {
+    transform: none;
   }
 
   .page-content {
-    padding: 40px 30px;
+    padding: 30px 25px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .album-cover-image {
@@ -1527,23 +1550,31 @@
   }
 
   .album-title-epic {
-    font-size: 3.2rem;
-    letter-spacing: 8px;
+    font-size: 2.5rem;
+    letter-spacing: 6px;
+    margin-bottom: 15px;
+  }
+
+  .title-word {
+    display: block;
+    margin: 5px 0;
   }
 
   .title-and {
-    font-size: 1.4rem;
-    letter-spacing: 5px;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    margin: 8px 0;
   }
 
   .title-underline {
-    width: 250px;
-    height: 3px;
+    width: 200px;
+    height: 2px;
+    margin: 15px auto;
   }
 
   .album-subtitle-epic {
-    font-size: 0.95rem;
-    letter-spacing: 2px;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
   }
 
   .album-title {
@@ -1566,8 +1597,9 @@
   }
 
   .navigation {
-    bottom: 15px;
-    gap: 12px;
+    bottom: max(15px, env(safe-area-inset-bottom));
+    gap: 10px;
+    padding: 0 10px;
   }
 
   .nav-controls {
@@ -1609,5 +1641,78 @@
 
   .keyboard-hint {
     display: none;
+  }
+
+  .tap-hint-epic {
+    font-size: 0.75rem;
+    bottom: 15px;
+  }
+
+  .click-area {
+    display: none; /* Disable click areas on mobile to prevent accidental navigation */
+  }
+}
+
+/* Extra small devices (iPhone SE, small phones) */
+@media (max-width: 430px) {
+  .book {
+    width: 95vw;
+    max-width: 380px;
+  }
+
+  .album-title-epic {
+    font-size: 2rem;
+    letter-spacing: 4px;
+  }
+
+  .title-and {
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+  }
+
+  .album-subtitle-epic {
+    font-size: 0.7rem;
+  }
+
+  .page-content {
+    padding: 25px 20px;
+  }
+
+  .track-title {
+    font-size: 1.3rem;
+  }
+
+  .track-description {
+    font-size: 0.85rem;
+  }
+
+  .nav-button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .page-indicator {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .book {
+    max-height: calc(100vh - 100px);
+    max-height: calc(100dvh - 100px);
+  }
+
+  .page-content {
+    padding: 20px;
+  }
+
+  .album-title-epic {
+    font-size: 2rem;
+  }
+
+  .navigation {
+    bottom: max(10px, env(safe-area-inset-bottom));
   }
 }
