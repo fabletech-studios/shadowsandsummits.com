@@ -18,6 +18,9 @@ export default function ParticleEffects({ type }: ParticleEffectsProps) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
     const particles: Particle[] = [];
     const particleCount = type === 'lightning' ? 15 : type === 'aurora' ? 30 : 25;
 
@@ -34,8 +37,8 @@ export default function ParticleEffects({ type }: ParticleEffectsProps) {
       angleSpeed: number;
 
       constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        this.x = Math.random() * canvasWidth;
+        this.y = Math.random() * canvasHeight;
         this.size = Math.random() * 3 + 1;
         this.speedX = (Math.random() - 0.5) * 0.5;
         this.speedY = (Math.random() - 0.5) * 0.5;
@@ -119,10 +122,10 @@ export default function ParticleEffects({ type }: ParticleEffectsProps) {
         }
 
         // Reset particles that go off screen
-        if (this.y < -10) this.y = canvas.height + 10;
-        if (this.y > canvas.height + 10) this.y = -10;
-        if (this.x < -10) this.x = canvas.width + 10;
-        if (this.x > canvas.width + 10) this.x = -10;
+        if (this.y < -10) this.y = canvasHeight + 10;
+        if (this.y > canvasHeight + 10) this.y = -10;
+        if (this.x < -10) this.x = canvasWidth + 10;
+        if (this.x > canvasWidth + 10) this.x = -10;
 
         this.color = this.getColor();
       }
@@ -180,7 +183,7 @@ export default function ParticleEffects({ type }: ParticleEffectsProps) {
     // Animation loop
     let animationId: number;
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       particles.forEach((particle) => {
         particle.update();
