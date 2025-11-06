@@ -4,6 +4,7 @@
   align-items: center;
   gap: 12px;
   margin-top: 20px;
+  margin-bottom: 0;
   z-index: 20;
   position: relative;
 }
@@ -150,8 +151,10 @@
 /* Responsive */
 @media (max-width: 768px) {
   .streaming-links {
-    gap: 8px;
-    margin-top: 12px;
+    gap: 6px;
+    margin-top: auto;
+    margin-bottom: 10px;
+    padding-top: 12px;
   }
 
   .streaming-icon {
