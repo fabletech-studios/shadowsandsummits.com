@@ -152,9 +152,8 @@
 @media (max-width: 768px) {
   .streaming-links {
     gap: 6px;
-    margin-top: auto;
-    margin-bottom: 10px;
-    padding-top: 12px;
+    margin-top: 15px;
+    margin-bottom: 0;
   }
 
   .streaming-icon {
