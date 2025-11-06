@@ -13,6 +13,8 @@ export default function BookFlip({ tracks }: BookFlipProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
   const [flipDirection, setFlipDirection] = useState<'forward' | 'backward'>('forward');
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
 
   // Get current theme based on page
   const getCurrentTheme = () => {
@@ -89,6 +91,43 @@ export default function BookFlip({ tracks }: BookFlipProps) {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentPage, isFlipping, tracks.length]);
+
+  // Touch/Swipe navigation
+  const minSwipeDistance = 50; // Minimum distance for a swipe
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd({
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY
+    });
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distanceX = touchStart.x - touchEnd.x;
+    const distanceY = touchStart.y - touchEnd.y;
+    const isHorizontalSwipe = Math.abs(distanceX) > Math.abs(distanceY);
+
+    // Only process horizontal swipes
+    if (isHorizontalSwipe && Math.abs(distanceX) > minSwipeDistance) {
+      if (distanceX > 0) {
+        // Swiped left - go to next page
+        nextPage();
+      } else {
+        // Swiped right - go to previous page
+        prevPage();
+      }
+    }
+  };
 
   const renderPage = (pageNum: number) => {
     if (pageNum === 0) {
@@ -196,7 +235,12 @@ export default function BookFlip({ tracks }: BookFlipProps) {
         </>
       )}
 
-      <div className="book">
+      <div
+        className="book"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {/* Current page being flipped */}
         <div
           className={`page ${currentPage === 0 ? 'cover' : ''} ${
@@ -253,6 +297,11 @@ export default function BookFlip({ tracks }: BookFlipProps) {
       {/* Keyboard Navigation Hint */}
       <div className="keyboard-hint">
         Use <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd> to navigate
+      </div>
+
+      {/* Mobile Swipe Hint */}
+      <div className="swipe-hint">
+        ← Swipe to navigate →
       </div>
 
       {/* Click areas for easier navigation */}
